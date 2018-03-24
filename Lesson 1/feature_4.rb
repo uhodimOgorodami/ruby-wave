@@ -17,7 +17,7 @@ if d > 0
   puts "x2 = #{(-1 * b - Math.sqrt(d)) / (2 * a)}"
 elsif  d.zero?
   puts "Дискриминант = #{d}"
-  puts "x = #{(- b - d)/(2 * a)}"
+  puts "x = #{(- b - d) / (2 * a)}"
 else
   d < 0
   puts "Дискриминант = #{d}, уравнение не имеет корней"
