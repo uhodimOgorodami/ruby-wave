@@ -11,11 +11,15 @@ c = gets.chomp.to_f
 
 d = b ** 2 - 4 * a  * c
 
-if
-	d >= 0 
+if d > 0
 	puts "Дискриминант = #{d}"
 	puts "x1 = #{(-1 * b + Math.sqrt(d)) / (2 * a)}"
 	puts "x2 = #{(-1 * b - Math.sqrt(d)) / (2 * a)}"
+elsif
+  d == 0
+  puts "Дискриминант = #{d}"
+  puts "x = #{(- b - d)/(2 * a)}"
 else
+  d < 0
   puts "Дискриминант = #{d}, уравнение не имеет корней"
 end
