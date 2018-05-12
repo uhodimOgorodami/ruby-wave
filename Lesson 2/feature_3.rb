@@ -1,9 +1,11 @@
 # Заполнить массив числами фибоначчи до 100
 
-fibonacci = [0, 1]
+fib_array = [0, 1]
+fib_num = 1
 
-loop do
-  next_fibonacci = fibonacci[-1] + fibonacci[-2]
-  break if next_fibonacci >= 100
-  fibonacci << next_fibonacci
+while fib_num <= 100
+  fib_array << fib_num
+  fib_num = fib_array[-1] + fib_array[-2]
 end
+
+puts fib_array
