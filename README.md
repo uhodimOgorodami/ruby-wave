@@ -1,1 +1,3 @@
 # ruby-wave
+
+# Thinknetica ^_^
