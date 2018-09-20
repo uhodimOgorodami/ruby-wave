@@ -39,48 +39,31 @@ class Train
 
   def take_route(route)
     @route = route
-    @station_index = 0
-    #current_station.arrive(self)
+    @current_station = @route.station_list.first
   end
 
   def go_next
-    return if last_station?
-    current_station.arrive(self)
-    @station_index += 1
-    current_station.arrive(self)
+    @current_station = next_station
+    puts "Поезд приехал на станцию #{@current_station}"
+    if @current_station == @route.station_list.last
+      puts "Это конечная, поезд дальше не идет."
+    end
   end
 
   def go_back
-    return if first_station?
-    current_station.departure(self)
-    @station_index -= 1 if @station_index > 0
-    current_station.arrive(self)
-  end
-
-  protected
-
-  # определение текущей, следующей и предыдущей станции поездом - это внутренняя механика,
-  # то есть клиентский код по-моему не должен об этом знать,
-  # методы для опередния по логике не будут вызываться со стороны клиента
-
-
-  def current_station
-    @route.station_list[@station_index]
+    if @current_station == @route.station_list.first
+      puts "Поезд не может поехать назад, поезд находится на начальной станции."
+    else
+      @current_station == previous_station
+      puts "Поезд приехал на станцию #{self.current_station}."
+    end
   end
 
   def next_station
-    @route.station_list[@station_index + 1]
+    next_station = @route.station_list[@route.station_list.index(@current_station) + 1]
   end
 
   def previous_station
-    @route.station_list[@station_index - 1] if @station_index > 0
-  end
-
-  def first_station?
-    current_station == @route.station_list.first
-  end
-
-  def last_station?
-    current_station == @route.station_list.last
+    previous_station = @route.station_list[@route.station_list.index(@current_station) - 1]
   end
 end

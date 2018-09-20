@@ -72,12 +72,12 @@ attr_accessor :stations, :trains, :routes, :wagons
   #1
   def create_station
     puts "Введите название станции: "
-    station_name = gets.chomp
-    unless station_name.empty?
-      @stations << Station.new(station_name)
-      puts "Станция - #{station_name}, успешно создана"
+    new_station = gets.chomp
+    if new_station == ''
+      puts "Вы ничего не ввели. Попробуйте снова."
     else
-      puts "Что-то пошло не так, попробуйте создать станцию снова"
+      @stations << Station.new(new_station)
+      puts "Станция - «#{new_station}» создана."
     end
   end
 
@@ -85,16 +85,16 @@ attr_accessor :stations, :trains, :routes, :wagons
   def create_train
     puts "Введите номер поезда: "
     number = gets.chomp
-    puts "Пожалуйста, укажите тип поезда('passenger' или 'cargo'): "
+    puts "Укажите тип поезда ([p] - пассажирский, [c] - грузовой): "
     type_of_train = gets.chomp
-    if type_of_train == 'passenger'
+    if type_of_train == 'p'
       train = PassengerTrain.new(number)
       @trains << train
-      puts "Пассажирский поезд - #{train} успешно создан"
-    elsif type_of_train == 'cargo'
+      puts "Пассажирский поезд - №#{number} успешно создан"
+    elsif type_of_train == 'c'
       train = CargoTrain.new(number)
       @trains << train
-      puts "Грузовой поезд - #{train} успешно создан"
+      puts "Грузовой поезд - №#{number} успешно создан"
     else
       puts "Некорректно был введен номер поезда, либо его тип. Попробуйте снова"
     end
@@ -102,37 +102,16 @@ attr_accessor :stations, :trains, :routes, :wagons
 
   #3
   def create_route
-    puts "Для создания маршрута, нам необходимы начальная и конечная станции."
-    puts "Укажите начальную станцию: "
-    start_station = gets.chomp
-    puts "Укажите конечную станцию: "
-    end_station = gets.chomp
-    if start_station == end_station || start_station.empty? && end_station.empty?
-      puts "Названия станций не могут быть одинаковыми, либо пустыми. Попробуйте снова"
-    else
-      route = Route.new(start_station, end_station)
-      @routes << route
-      puts "Маршрут с начальной станцией #{start_station} и конечной #{end_station} - успешно создан"
-    end
-  end
-
-  def list_of_trains
-    @trains.each_with_index do |train, index|
-      puts "#{index} - поезд №#{train.number}"
-    end
-  end
-
-  def list_of_routes
-    @routes.each_with_index do |route, index|
-      puts "#{index} - маршрут #{route.station_list}"
-    end
-  end
-
-  #8
-  def list_of_stations
-    @stations.each_with_index do |station, index|
-      puts "#{index} - станция #{station.name}"
-    end
+    list_of_stations
+    puts "Выберите индекс начальной станции из списика."
+    start_s = gets.chomp.to_i
+    puts "Начальная станция - «#{@stations[start_s].name}»."
+    puts "Выберите индекс конечной станции."
+    end_s = gets.chomp.to_i
+    puts "Конечная - «#{@stations[end_s].name}»."
+    new_route = Route.new(@stations[start_s], @stations[end_s])
+    @routes << new_route
+    puts "Маршрут «#{@stations[start_s].name} - #{@stations[end_s].name}» создан."
   end
 
   #4
@@ -140,20 +119,43 @@ attr_accessor :stations, :trains, :routes, :wagons
     list_of_trains
     puts "Выберите и введите индекс поезда, которому хотите присвоить маршрут: "
     train_choice = gets.chomp.to_i
-    if train_choice.nil?
+    if train_choice == ''
       puts "Вы не выбрали ничего, попробуйте снова"
     else
-      list_of_routes
+      puts "#{list_of_routes}"
     end
-    puts "Теперь необходимо выбрать машрут, который хотим присвоить данному поезду - #{list_of_trains[train_choice]}: "
+    puts "Выберите индекс маршрута: "
     route_choice = gets.chomp.to_i
     if route_choice.nil?
       puts "Вы не выбрали ничего, попробуйте снова"
     else
       @trains[train_choice].take_route(@routes[route_choice])
-      puts "К поезду #{@trains[train_choice]} успешно присвоен маршрут #{@routes[route_choice]}"
+      puts "К поезду #{@trains[train_choice].number} успешно присвоен маршрут «#{@routes[route_choice].station_list[0].name} - #{@routes[route_choice].station_list[-1].name}»"
+      @routes[route_choice].station_list[0].arrive(@trains[train_choice])
     end
   end
+
+
+  def list_of_trains
+    @trains.each_with_index do |train, index|
+      puts "[#{index}] - поезд №#{train.number}"
+    end
+  end
+
+  def list_of_routes
+    @routes.each_with_index do |route, index|
+      puts "[#{index}] - маршрут «#{route.station_list[0].name} - #{route.station_list[-1].name}»"
+    end
+  end
+
+  #8
+  def list_of_stations
+    @stations.each_with_index do |station, index|
+      puts "[#{index}] - станция «#{station.name}»"
+    end
+  end
+
+
 
   #10
   def add_station_to_route
@@ -165,13 +167,13 @@ attr_accessor :stations, :trains, :routes, :wagons
     else
       list_of_stations
     end
-    puts "Теперь необходимо выбрать станцию, которую хотим добавить к данному маршруту - #{@routes[route_choice]}: "
+    puts "Теперь необходимо выбрать станцию: "
     station_choice = gets.chomp.to_i
     if station_choice.nil?
       puts "Вы не выбрали ничего, попробуйте снова"
     else
       @routes[route_choice].add_midway_station(@stations[station_choice])
-      puts "К маршруту #{@routes[route_choice]} успешно добавлена станция #{@stations[station_choice]}"
+      puts "К маршруту «#{@routes[route_choice].station_list[0].name} - #{@routes[route_choice].station_list[-1].name}» успешно добавлена станция #{@stations[station_choice].name}"
     end
   end
 
@@ -183,7 +185,7 @@ attr_accessor :stations, :trains, :routes, :wagons
     if route_choice.nil?
       puts "Вы не выбрали ничего, попробуйте снова"
     else
-      puts "Список доступных станций для удаления #{@routes[route_choice].station_list}"
+      puts "Список доступных станций для удаления #{@routes[route_choice].station_list.name}"
     end
     puts "Теперь необходимо выбрать станцию, которую хотим убрать из списка: "
     station_choice = gets.chomp.to_i
@@ -191,7 +193,7 @@ attr_accessor :stations, :trains, :routes, :wagons
       puts "Вы не выбрали ничего, попробуйте снова"
     else
       @routes[route_choice].remove_midway_station(@stations[station_choice])
-      puts "Станция #{@stations[station_choice]} успешно удалена из маршрута #{@routes[route_choice]}"
+      puts "Станция #{@stations[station_choice].name} успешно удалена из маршрута «#{@routes[route_choice].station_list[0].name} - #{@routes[route_choice].station_list[-1].name}»"
     end
   end
 
@@ -200,21 +202,21 @@ attr_accessor :stations, :trains, :routes, :wagons
     list_of_trains
     puts "К какому поезду будем добавлять вагон? Введите индекс: "
     train_choice = gets.chomp.to_i
-    if train_choice.nil?
-      puts "Вы не выбрали ничего, попробуйте снова"
-    elsif @trains[train_choice].type == 'cargo'
+    puts "Выбран поезд №#{@trains[train_choice].number} тип #{@trains[train_choice].type}"
+    if @trains[train_choice].type == :cargo
       puts "К #{@trains[train_choice]} можно добавлять только грузовые вагоны, так как поезд является грузовым"
       puts "Присоединяем вагон..."
       cargo_wagon = CargoWagon.new
       @trains[train_choice].add_wagon(cargo_wagon)
       puts "#{cargo_wagon} успешно прицеплен к поезду #{@trains[train_choice]}"
-    elsif @trains[train_choice].type == 'passenger'
+    elsif @trains[train_choice].type == :passenger
       puts "К #{@trains[train_choice]} можно добавлять только пассажирские вагоны, так как поезд является пассажирским"
       puts "Присоединяем вагон..."
       passenger_wagon = PassengerWagon.new
       @trains[train_choice].add_wagon(passenger_wagon)
       puts "#{passenger_wagon} успешно прицеплен к поезду #{@trains[train_choice]}"
     else
+      puts "Попробуйте снова"
     end
   end
 
@@ -245,15 +247,24 @@ attr_accessor :stations, :trains, :routes, :wagons
     list_of_trains
     puts "Какой поезд будем двигать? Введите индекс: "
     train_choice = gets.chomp.to_i
-    puts "Для движения вперед введите 'f', для движения назад введите 'b': "
-    move_choice = gets.chomp
-    case move_choice
-    when move_choice == 'f'
-      @trains[train_choice].go_next
-    when move_choice == 'b'
+    if @trains.include?(@trains[train_choice])
+      puts "Будем двигать №#{@trains[train_choice].number}."
+    else
+      puts "Вы не указали индекс поезда. Попробуйте снова."
+    end
+    puts "Вперед - введите [1],\nНазад - введите [2]: "
+    move_choice = gets.chomp.to_i
+    if move_choice == 1
+      if @trains[train_choice].route.station_list.current_station == @trains[train_choice].route.station_list.last
+        puts "Поезд уже на конечной станции."
+      else
+        @trains[train_choice].go_next
+        puts "поезд прибыл на станцию #{@trains[train_choice].route.station_list[@route.station_list.index(@current_station) + 1]}"
+      end
+    elsif move_choice == 2
       @trains[train_choice].go_back
     else
-      puts "Ошибка! Попробуйте снова"
+      puts "Ошибка!"
     end
   end
 
@@ -262,8 +273,8 @@ attr_accessor :stations, :trains, :routes, :wagons
     list_of_stations
     puts "Выберете индекс станции, на которой хотите увидеть список поездов: "
     station_choice = gets.chomp.to_i
-    if @stations.include?(station_choice)
-      puts "#{@stations[station_choice].train_list}"
+    if @stations.include?(@stations[station_choice])
+      puts "Текущий список поездов: #{@stations[station_choice].train_list}"
     else
       puts "Вы не выбрали индекс, попробуйте снова"
     end
