@@ -42,9 +42,19 @@ class Train
     @current_station = @route.station_list.first
   end
 
+  def current_station
+    self.route.station_list.each do |x|
+      if x.train_list.include?(self)
+        @current_station = x
+      else
+        @current_station = @route.station_list.first
+      end
+    end
+  end
+
   def go_next
     @current_station = next_station
-    puts "Поезд приехал на станцию #{@current_station}"
+    puts "Поезд приехал на станцию #{@current_station.name}"
     if @current_station == @route.station_list.last
       puts "Это конечная, поезд дальше не идет."
     end
@@ -55,7 +65,7 @@ class Train
       puts "Поезд не может поехать назад, поезд находится на начальной станции."
     else
       @current_station == previous_station
-      puts "Поезд приехал на станцию #{self.current_station}."
+      puts "Поезд приехал на станцию #{@current_station.name}."
     end
   end
 

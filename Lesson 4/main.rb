@@ -247,22 +247,19 @@ attr_accessor :stations, :trains, :routes, :wagons
     list_of_trains
     puts "Какой поезд будем двигать? Введите индекс: "
     train_choice = gets.chomp.to_i
-    if @trains.include?(@trains[train_choice])
-      puts "Будем двигать №#{@trains[train_choice].number}."
+    train = @trains[train_choice]
+    route = train.route
+    if @trains.include?(train)
+      puts "Будем двигать №#{train.number}."
     else
       puts "Вы не указали индекс поезда. Попробуйте снова."
     end
     puts "Вперед - введите [1],\nНазад - введите [2]: "
     move_choice = gets.chomp.to_i
     if move_choice == 1
-      if @trains[train_choice].route.station_list.current_station == @trains[train_choice].route.station_list.last
-        puts "Поезд уже на конечной станции."
-      else
-        @trains[train_choice].go_next
-        puts "поезд прибыл на станцию #{@trains[train_choice].route.station_list[@route.station_list.index(@current_station) + 1]}"
-      end
+      train.go_next
     elsif move_choice == 2
-      @trains[train_choice].go_back
+      train.go_back
     else
       puts "Ошибка!"
     end
