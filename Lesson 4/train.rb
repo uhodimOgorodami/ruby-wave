@@ -53,10 +53,11 @@ class Train
   end
 
   def go_next
-    @current_station = next_station
-    puts "Поезд приехал на станцию #{@current_station.name}"
     if @current_station == @route.station_list.last
       puts "Это конечная, поезд дальше не идет."
+    else
+      @current_station = next_station
+      puts "Поезд приехал на станцию #{@current_station.name}"
     end
   end
 
@@ -64,8 +65,8 @@ class Train
     if @current_station == @route.station_list.first
       puts "Поезд не может поехать назад, поезд находится на начальной станции."
     else
-      @current_station == previous_station
-      puts "Поезд приехал на станцию #{@current_station.name}."
+      @current_station = previous_station
+      puts "Поезд вернулся на станцию #{@current_station.name}."
     end
   end
 
