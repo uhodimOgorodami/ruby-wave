@@ -1,7 +1,12 @@
 # === Train ===
 class Train
+  include Made
+  include InstanceCounter
+
   attr_accessor :speed, :route
   attr_reader :number, :type, :wagons, :speed
+
+  @@trains_counter = []
 
   def initialize(number)
     @number = number
@@ -9,6 +14,12 @@ class Train
     @wagon = 0
     @wagons = []
     @speed = 0
+    @@trains_counter << self
+    register_instance
+  end
+
+  def self.find(number)
+    @@trains_counter[number]
   end
 
   def increase_speed(speed)
@@ -66,7 +77,7 @@ class Train
       puts "Поезд не может поехать назад, поезд находится на начальной станции."
     else
       @current_station = previous_station
-      puts "Поезд вернулся на станцию #{@current_station.name}."
+      puts "Поезд возвращается на станцию #{@current_station.name}."
     end
   end
 

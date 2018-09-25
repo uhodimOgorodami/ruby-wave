@@ -103,8 +103,8 @@ attr_accessor :stations, :trains, :routes, :wagons
   #3
   def create_route
     unless @stations.any?
-      puts "Для начала создайте станции."
-      return start
+      puts "Текущее количество станций = #{@staions.to_i}. Маршрут можно создать из 2-х и более станций."
+      return
     else
       list_of_stations
     end
@@ -115,16 +115,19 @@ attr_accessor :stations, :trains, :routes, :wagons
       puts "Начальная станция - «#{start_station.name}»."
     else
       puts "Индекс задан неверно. Попробуйте снова."
-      return start
+      return
     end
     puts "Выберите индекс конечной станции."
     end_s = gets.chomp.to_i
     end_station = @stations[end_s]
-    if @stations.include?(end_station)
+    if @stations.include?(end_station) && end_station != start_station
       puts "Конечная станция - «#{end_station.name}»."
+    elsif end_station == start_station
+      puts "Маршрут не может состоять из одинаковых начальной и конечной станции."
+      return
     else
       puts "Индекс задан неверно. Попробуйте снова."
-      return start
+      return
     end
     new_route = Route.new(start_station, end_station)
     @routes << new_route
@@ -135,20 +138,20 @@ attr_accessor :stations, :trains, :routes, :wagons
   def set_route_to_train
     unless list_of_trains.any?
       puts "Создайте поезд для присвоения маршрута"
-      return start
+      return
     else
       puts "Выберите и введите индекс поезда, которому хотите присвоить маршрут: "
       train_choice = gets.chomp.to_i
     end
     unless train_choice == '' || @trains.include?(@trains[train_choice])
       puts "Неверно задан индекс поезда. Попробуйте снова."
-      return start
+      return
     else
       puts "#{list_of_routes}"
     end
     unless @routes.any?
       puts "Нет созданных маршрутов, создайте новый."
-      return start
+      return
     else
       puts "Выберите индекс маршрута: "
       route_choice = gets.chomp.to_i
@@ -188,7 +191,7 @@ attr_accessor :stations, :trains, :routes, :wagons
   def add_station_to_route
     unless @routes.any?
       puts "Нет созданных маршрутов, создайте новый."
-      return start
+      return
     else
       list_of_routes
     end
@@ -200,7 +203,7 @@ attr_accessor :stations, :trains, :routes, :wagons
       puts "Добавлять станцию будем к маршруту #{route_name}"
     else
       puts "Неверно задан индекс маршрута. Попробуйте снова."
-      return start
+      return
     end
     puts "Теперь необходимо выбрать станцию: "
     list_of_stations
@@ -211,7 +214,7 @@ attr_accessor :stations, :trains, :routes, :wagons
       puts "К маршруту «#{route_name}» успешно добавлена станция «#{station.name}»"
     else
       puts "Неверно задан индекс станции. Попробуйте снова."
-      return start
+      return
     end
   end
 
