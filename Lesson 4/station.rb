@@ -1,7 +1,7 @@
 # === Station ===
 
 class Station
-  attr_reader :name
+  attr_reader   :name
   attr_accessor :train_list
 
   @@stations_counter = []
@@ -11,7 +11,7 @@ class Station
   end
 
   def initialize(name)
-    @name = name
+    @name       = name
     @train_list = []
     @@stations_counter << self
   end

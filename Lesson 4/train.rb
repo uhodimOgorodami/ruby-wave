@@ -1,21 +1,28 @@
+require_relative 'instance_counter' # для более быстрого теста в irb
+require_relative 'made'
+
 # === Train ===
 class Train
   include Made
   include InstanceCounter
 
-  attr_accessor :speed, :route
-  attr_reader :number, :type, :wagons, :speed
+  attr_accessor :speed,
+                :route
 
-  @@trains_counter = []
+  attr_reader :number,
+              :type,
+              :wagons,
+              :speed
+
+  @@trains_counter = {}
 
   def initialize(number)
-    @number = number
-    @type = type
-    @wagon = 0
-    @wagons = []
-    @speed = 0
-    @@trains_counter << self
-    register_instance
+    @number                       = number
+    @type                         = type
+    @wagon                        = 0
+    @wagons                       = []
+    @speed                        = 0
+    @@trains_counter[self.number] = self
   end
 
   def self.find(number)

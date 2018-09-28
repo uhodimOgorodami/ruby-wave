@@ -10,13 +10,16 @@ require_relative 'cargo_wagon'
 
 class RailwayStationManagement
 
-attr_accessor :stations, :trains, :routes, :wagons
+attr_accessor :stations,
+              :trains,
+              :routes,
+              :wagons
 
   def initialize
     @stations = []
-    @trains = []
-    @routes = []
-    @wagons = []
+    @trains   = []
+    @routes   = []
+    @wagons   = []
   end
 
   def start

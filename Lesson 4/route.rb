@@ -3,8 +3,8 @@ class Route
   attr_reader :midway_station_list
 
   def initialize(first_station, last_station)
-    @first_station = first_station
-    @last_station = last_station
+    @first_station       = first_station
+    @last_station        = last_station
     @midway_station_list = []
   end
 
