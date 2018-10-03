@@ -5,7 +5,4 @@ class CargoTrain < Train
     @type = :cargo
   end
 
-  def loading
-    puts "Погрузка ..."
-  end
 end
