@@ -107,7 +107,7 @@ attr_accessor :stations,
     rescue RuntimeError => e
       attempt += 1
       puts e.inspect
-      retry if attempt < 10
+      retry if attempt < 3
     end
   end
 

@@ -1,5 +1,7 @@
+require_relative 'validation'
+
 module Made
-  
+
   include Validation
   attr_accessor :made
 

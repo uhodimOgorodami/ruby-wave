@@ -1,4 +1,5 @@
 module Validation
+
   def valid?
     validate!
   rescue
