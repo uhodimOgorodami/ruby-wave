@@ -28,7 +28,7 @@ class Route
   protected
 
   def validate!
-    raise "Маршрут не может быть создан без станций." if @first_station.empty? || @last_station.empty?
+    raise "Маршрут не может быть создан без станций." if @first_station.nil? || @last_station.nil?
     true
   end
 

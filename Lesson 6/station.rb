@@ -44,9 +44,9 @@ class Station
 
   def validate!
     raise "Название станции не может быть пустым" if name.to_s.empty?
-    raise "Имя станции может состоять только из букв" if name !~ STATION_FORMAT
-    raise "Имя станции слишком длинное" if name.size > 10
-    raise "Имя станции слишком короткое" if name.size < 3
+    raise "название не может содержать спецсимволы" if name !~ STATION_FORMAT
+    raise "название не более 10 символов" if name.size > 10
+    raise "название не менее 3-х символов" if name.size < 3
     true
   end
 
