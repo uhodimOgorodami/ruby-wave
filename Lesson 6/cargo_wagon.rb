@@ -12,10 +12,10 @@ class CargoWagon < Wagon
   def initialize(number, all_volume)
     super
     @type = :cargo
-    @all_volume = all_volume
+    @all_volume = all_volume.to_i
   end
 
-  def load(volume)
+  def cargo_load(volume)
     unless @all_volume == 0
       @free_volume = @all_volume - volume
       @occupied_volume = @all_volume - @free_volume

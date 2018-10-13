@@ -7,13 +7,13 @@ attr_reader   :number
   def initialize(number, seats)
     super
     @type = :passenger
-    @passenger_seats = seats
+    @passenger_seats = seats.to_i
   end
 
   def take_seat(seat)
     unless @passenger_seats == 0
-      @occupied_seats = @passenger_seats - seat
-      @free_seats = @passenger_seats
+      @free_seats = @passenger_seats - seat
+      @occupied_seats = @passenger_seats - @free_seats
     else
       puts 'свободных мест не осталось'
     end
@@ -21,17 +21,17 @@ attr_reader   :number
 
   def occupied_seats
     unless @occupied_seats.nil?
-      print "занятых мест: #{@occupied_seats}"
+      puts "занятых мест: #{@occupied_seats}"
     else
-      print "все места свободны"
+      puts "все места свободны"
     end
   end
 
   def free_seats
     unless @free_seats.nil?
-      print "свободных мест: #{@free_seats}"
+      puts "свободных мест: #{@free_seats}"
     else
-      print "сейчас свободно #{@passenger_seats} мест(а)"
+      puts "сейчас свободно #{@passenger_seats} мест(а)"
     end
   end
 

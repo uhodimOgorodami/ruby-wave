@@ -1,3 +1,4 @@
+require 'pry'
 require_relative 'station'
 require_relative 'route'
 require_relative 'train'
@@ -112,29 +113,31 @@ attr_accessor :stations,
     else
       puts "выберите индекс поезда:"
       list_of_trains
-      choice = gets.chomp.to_i
+      train = gets.chomp.to_i
     end
-    if @trains[choice].wagons.empty?
+    if @trains[train].wagons.empty?
       puts "у выбранного поезда нет прицепленных вагонов"
       return
     end
     case
-    when @trains[choice].type == :passenger
-      puts 'сколько мест занять?'
-      passenger_action = gets.chomp
-      @trains[choice].wagon_list do |wagon|
-        wagon.take_seat(passenger_action)
-        print "вы заняли место" + "#{wagon.free_seats}"
-      end
-    when @trains[choice].type == :cargo
+    when @trains[train].type == :passenger
       puts "выберите вагон:"
-      @trains[choice].wagon_list_with_index
-      wagon_choice = gets.chomp
-
+      @trains[train].wagon_list_with_index
+      wagon_choice = gets.chomp.to_i
+      puts 'сколько мест занять?'
+      count = gets.chomp.to_i
+      wagon = @trains[train].wagons[wagon_choice]
+      wagon.take_seat(count)
+      wagon.free_seats
+    when @trains[train].type == :cargo
+      puts "выберите вагон:"
+      @trains[train].wagon_list_with_index
+      wagon_choice = gets.chomp.to_i
       puts 'сколько объема занять?'
       cargo_action = gets.chomp.to_i
-      @trains[choice].wagons[wagon_choice].load(cargo_action)
-      print "вы заняли объем" + "#{wagon.occupied_volume}"
+      wagon = @trains[train].wagons[wagon_choice]
+      wagon.cargo_load(cargo_action)
+      wagon.free_volume
     end
   end
 
