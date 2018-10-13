@@ -8,15 +8,15 @@ class Wagon
                 :made
   WAGON_FORMAT = /^[1-9]{2}$/
 
-  def initialize(number)
-    @wagon_number = number
+  def initialize(number, *)
+    @number = number
     validate!
   end
 
   protected
 
   def validate!
-    raise "Некорректный номер вагона" if @wagon_number.to_s !~ WAGON_FORMAT
+    raise "Некорректный номер вагона" if @number.to_s !~ WAGON_FORMAT
     true
   end
 

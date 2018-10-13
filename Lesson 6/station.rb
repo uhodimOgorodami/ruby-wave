@@ -40,6 +40,10 @@ class Station
     @train_list.delete(train) if @train_list.include?(train)
   end
 
+  def trains_list_at_station
+    @trains.each { |train| yield train }
+  end
+
   protected
 
   def validate!

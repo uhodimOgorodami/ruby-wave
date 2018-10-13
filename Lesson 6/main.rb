@@ -20,7 +20,6 @@ attr_accessor :stations,
     @stations = []
     @trains   = []
     @routes   = []
-    @wagons   = []
   end
 
   def start
@@ -39,6 +38,8 @@ attr_accessor :stations,
       when "9" then show_trains_on_station
       when "10" then add_station_to_route
       when "11" then remove_station_from_route
+      when "12" then wagons_list_from_train
+      when "13" then wagons_operations
       when "0" then break
       else
         puts "Ошибка! Попробуйте снова"
@@ -71,8 +72,70 @@ attr_accessor :stations,
     puts "Список поездов на станции:   [9]"
     puts "Добавить станцию к маршруту: [10]"
     puts "Удалить станцию из маршрута: [11]"
+    puts "Список вагонов у поезда:     [12]"
+    puts "Операции с вагонами:         [13]"
     puts "Выход из программы:          [0]"
     puts "================================"
+  end
+
+  #12
+  def wagons_list_from_train
+    unless @trains.any?
+      puts 'нечего выводить, создайте поезда, присвойте им вагоны'
+      return
+    else
+      puts "выберите индекс поезда:"
+      list_of_trains
+      choice = gets.chomp.to_i
+    end
+    if @trains[choice].wagons.empty?
+      puts "у выбранного поезда нет прицепленных вагонов"
+      return
+    end
+    case
+    when @trains[choice].type == :passenger
+      @trains[choice].wagon_list do |wagon|
+        puts "#{wagon.free_seats} - у вагона №#{wagon.number} \u{1F683}"
+      end
+    when @trains[choice].type == :cargo
+      @trains[choice].wagon_list do |wagon|
+        puts "#{wagon.occupied_volume} - у вагона №#{wagon.number} \u{1F683}"
+      end
+    end
+  end
+
+  #13
+  def wagons_operations
+    unless @trains.any?
+      puts 'сперва создайте поезда, присвойте им вагоны'
+      return
+    else
+      puts "выберите индекс поезда:"
+      list_of_trains
+      choice = gets.chomp.to_i
+    end
+    if @trains[choice].wagons.empty?
+      puts "у выбранного поезда нет прицепленных вагонов"
+      return
+    end
+    case
+    when @trains[choice].type == :passenger
+      puts 'сколько мест занять?'
+      passenger_action = gets.chomp
+      @trains[choice].wagon_list do |wagon|
+        wagon.take_seat(passenger_action)
+        print "вы заняли место" + "#{wagon.free_seats}"
+      end
+    when @trains[choice].type == :cargo
+      puts "выберите вагон:"
+      @trains[choice].wagon_list_with_index
+      wagon_choice = gets.chomp
+
+      puts 'сколько объема занять?'
+      cargo_action = gets.chomp.to_i
+      @trains[choice].wagons[wagon_choice].load(cargo_action)
+      print "вы заняли объем" + "#{wagon.occupied_volume}"
+    end
   end
 
   #1
@@ -268,28 +331,28 @@ attr_accessor :stations,
     attempt = 0
     begin
       unless @trains.any?
-        puts "Создайте поезд для добавления вагона"
+        puts "нет поездов, чтобы прицепить вагон"
         return
       else
         list_of_trains
-        puts "К какому поезду будем добавлять вагон? Введите индекс: "
+        puts "выберите индекс поезда:"
         train_choice = gets.chomp.to_i
       end
-      puts "Выбран поезд №#{@trains[train_choice].number} тип #{@trains[train_choice].type}"
-      puts "Присвойте вагону номер"
-      num = gets.chomp.to_i
+      puts "выбран поезд №#{@trains[train_choice].number} тип #{@trains[train_choice].type}"
+      puts "присвойте вагону номер:"
+      num = gets.chomp
       if @trains[train_choice].type == :cargo
-        puts "К #{@trains[train_choice].number} можно добавлять только грузовые вагоны, так как поезд является грузовым"
-        puts "Присоединяем вагон..."
-        cargo_wagon = CargoWagon.new(num)
+        puts "укажите объем грузового вагона:"
+        cargo_volume = gets.chomp
+        cargo_wagon = CargoWagon.new(num, cargo_volume)
         @trains[train_choice].add_wagon(cargo_wagon)
-        puts "#{cargo_wagon.num} успешно прицеплен к поезду #{@trains[train_choice]}"
+        puts "\u{1F683} №#{num} успешно прицеплен к поезду №#{@trains[train_choice].number}"
       elsif @trains[train_choice].type == :passenger
-        puts "К #{@trains[train_choice].number} можно добавлять только пассажирские вагоны, так как поезд является пассажирским"
-        puts "Присоединяем вагон..."
-        passenger_wagon = PassengerWagon.new(num)
+        puts "укажите количество мест в вагоне:"
+        seats_count = gets.chomp
+        passenger_wagon = PassengerWagon.new(num, seats_count)
         @trains[train_choice].add_wagon(passenger_wagon)
-        puts "Вагон #{passenger_wagon.number} успешно прицеплен к поезду #{@trains[train_choice].number}"
+        puts "\u{1F683} №#{num} успешно прицеплен к поезду №#{@trains[train_choice].number}"
       else
         puts "Попробуйте снова"
       end

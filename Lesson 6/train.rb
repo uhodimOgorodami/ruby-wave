@@ -23,7 +23,6 @@ class Train
   def initialize(number)
     @number                       = number
     @type                         = type
-    @wagon                        = 0
     @wagons                       = []
     @speed                        = 0
     @@trains_counter[self.number] = self
@@ -43,7 +42,7 @@ class Train
   end
 
   def add_wagon(wagon)
-      @wagons << @wagon
+      @wagons << wagon
   end
 
   def remove_wagon(wagon)
@@ -91,11 +90,21 @@ class Train
     previous_station = @route.station_list[@route.station_list.index(@current_station) - 1]
   end
 
+  def wagon_list
+    @wagons.each { |wagon| yield wagon }
+  end
+
+  def wagon_list_with_index
+    @wagons.each_with_index do |wagon, index|
+      puts "[#{index}] - вагон «#{wagon.number}»"
+    end
+  end
+
   protected
 
   def validate!
     raise "Номер поезда не может быть пустым" if number.to_s.empty?
     raise "Номер поезда задан в неверном формате, попробуйте еще раз" if number !~ TRAIN_FORMAT
   end
-  
+
 end
