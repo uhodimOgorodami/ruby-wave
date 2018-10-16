@@ -1,3 +1,6 @@
+require_relative 'validation'
+require_relative 'made'
+require_relative 'instance_counter'
 # === Train ===
 class Train
   include Made

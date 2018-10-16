@@ -1,3 +1,5 @@
+require_relative 'validation'
+
 class Station
   include Validation
 
