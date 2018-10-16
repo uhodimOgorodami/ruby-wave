@@ -1,9 +1,7 @@
 require_relative 'validation'
 # === Route ===
 class Route
-
   include Validation
-
   attr_reader :midway_station_list
 
   def initialize(first_station, last_station)
@@ -28,8 +26,9 @@ class Route
   protected
 
   def validate!
-    raise "Маршрут не может быть создан без станций." if @first_station.nil? || @last_station.nil?
+    error_message = 'Маршрут не может быть создан без станций'
+    raise error_message if @first_station.nil? || @last_station.nil?
+
     true
   end
-
 end

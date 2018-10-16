@@ -1,8 +1,8 @@
 class PassengerWagon < Wagon
-attr_reader   :number
-              :type
-              :made
-              :passenger_seats
+  attr_reader :number
+  :type
+  :made
+  :passenger_seats
 
   def initialize(number, seats)
     super
@@ -11,28 +11,27 @@ attr_reader   :number
   end
 
   def take_seat(seat)
-    unless @passenger_seats == 0
+    if @passenger_seats == 0
+      puts 'свободных мест не осталось'
+    else
       @free_seats = @passenger_seats - seat
       @occupied_seats = @passenger_seats - @free_seats
-    else
-      puts 'свободных мест не осталось'
-    end
+      end
   end
 
   def occupied_seats
-    unless @occupied_seats.nil?
-      puts "занятых мест: #{@occupied_seats}"
+    if @occupied_seats.nil?
+      puts 'все места свободны'
     else
-      puts "все места свободны"
-    end
+      puts "занятых мест: #{@occupied_seats}"
+      end
   end
 
   def free_seats
-    unless @free_seats.nil?
-      puts "свободных мест: #{@free_seats}"
-    else
+    if @free_seats.nil?
       puts "сейчас свободно #{@passenger_seats} мест(а)"
-    end
+    else
+      puts "свободных мест: #{@free_seats}"
+      end
   end
-
 end

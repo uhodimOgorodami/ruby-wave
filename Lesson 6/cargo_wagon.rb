@@ -3,11 +3,7 @@ require_relative 'made'
 require_relative 'wagon'
 
 class CargoWagon < Wagon
-
-  attr_reader   :number
-                :type
-                :made
-                :all_volume
+  attr_reader :number, :type, :made, :all_volume
 
   def initialize(number, all_volume)
     super
@@ -16,7 +12,7 @@ class CargoWagon < Wagon
   end
 
   def cargo_load(volume)
-    unless @all_volume == 0
+    if !@all_volume.zero?
       @free_volume = @all_volume - volume
       @occupied_volume = @all_volume - @free_volume
     else
@@ -25,7 +21,7 @@ class CargoWagon < Wagon
   end
 
   def free_volume
-    unless @free_volume.nil?
+    if !@free_volume.nil?
       puts "текущий свободный объем составляет: #{@free_volume}"
     else
       puts "объем вагона ничем не занят: #{@all_volume}"
@@ -33,11 +29,10 @@ class CargoWagon < Wagon
   end
 
   def occupied_volume
-    unless @occupied_volume.nil?
+    if !@occupied_volume.nil?
       puts "текуший занятый объем составляет: #{@occupied_volume}"
     else
       puts "объем вагона ничем не занят: #{@all_volume}"
     end
   end
-
 end

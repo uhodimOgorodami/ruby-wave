@@ -42,7 +42,7 @@ class Train
   end
 
   def add_wagon(wagon)
-      @wagons << wagon
+    @wagons << wagon
   end
 
   def remove_wagon(wagon)
@@ -55,18 +55,18 @@ class Train
   end
 
   def current_station
-    self.route.station_list.each do |x|
-      if x.train_list.include?(self)
-        @current_station = x
-      else
-        @current_station = @route.station_list.first
-      end
+    route.station_list.each do |x|
+      @current_station = if x.train_list.include?(self)
+                           x
+                         else
+                           @route.station_list.first
+                         end
     end
   end
 
   def go_next
     if @current_station == @route.station_list.last
-      puts "Это конечная, поезд дальше не идет."
+      puts 'Это конечная, поезд дальше не идет.'
     else
       @current_station = next_station
       puts "Поезд приехал на станцию #{@current_station.name}"
@@ -75,7 +75,7 @@ class Train
 
   def go_back
     if @current_station == @route.station_list.first
-      puts "Поезд не может поехать назад, поезд находится на начальной станции."
+      puts 'Поезд не может поехать назад, поезд находится на начальной станции.'
     else
       @current_station = previous_station
       puts "Поезд возвращается на станцию #{@current_station.name}."
@@ -103,8 +103,7 @@ class Train
   protected
 
   def validate!
-    raise "Номер поезда не может быть пустым" if number.to_s.empty?
-    raise "Номер поезда задан в неверном формате, попробуйте еще раз" if number !~ TRAIN_FORMAT
+    raise 'Номер поезда не может быть пустым' if number.to_s.empty?
+    raise 'Номер поезда задан в неверном формате, попробуйте еще раз' if number !~ TRAIN_FORMAT
   end
-
 end
