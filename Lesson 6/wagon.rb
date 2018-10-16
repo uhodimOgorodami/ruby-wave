@@ -1,4 +1,3 @@
-
 class Wagon
   include Made
   include Validation

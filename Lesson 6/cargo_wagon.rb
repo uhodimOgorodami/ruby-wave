@@ -1,7 +1,3 @@
-require_relative 'validation'
-require_relative 'made'
-require_relative 'wagon'
-
 class CargoWagon < Wagon
   attr_reader :number, :type, :made, :all_volume
 

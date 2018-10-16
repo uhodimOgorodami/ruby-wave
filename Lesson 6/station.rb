@@ -1,18 +1,16 @@
-require_relative 'validation'
-
 class Station
   include Validation
 
   attr_reader   :name
   attr_accessor :train_list
 
-  @@stations_counter = []
-
   STATION_FORMAT = /^[a-z]*|[а-я]*$/i
 
   def self.all
     @@stations_counter
   end
+
+  @@stations_counter = []
 
   def initialize(name)
     @name       = name

@@ -5,20 +5,15 @@ module InstanceCounter
   end
 
   module ClassMethods
-    private
-
     attr_accessor :instances
-
-    def self.instances_count
-      @@instances += 1
-    end
   end
 
   module InstanceMethods
     private
 
     def register_instance
-      self.class.send(:instances_count)
+      self.class.instances ||= 0
+      self.class.instances += 1
     end
   end
 end

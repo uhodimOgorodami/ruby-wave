@@ -1,4 +1,3 @@
-require_relative 'validation'
 # === Route ===
 class Route
   include Validation

@@ -1,7 +1,3 @@
-require_relative 'instance_counter' # для более быстрого теста в irb
-require_relative 'made'
-require_relative 'validation'
-
 # === Train ===
 class Train
   include Made
@@ -13,8 +9,7 @@ class Train
 
   attr_reader :number,
               :type,
-              :wagons,
-              :speed
+              :wagons
 
   @@trains_counter = {}
 
@@ -83,11 +78,11 @@ class Train
   end
 
   def next_station
-    next_station = @route.station_list[@route.station_list.index(@current_station) + 1]
+    @route.station_list[@route.station_list.index(@current_station) + 1]
   end
 
   def previous_station
-    previous_station = @route.station_list[@route.station_list.index(@current_station) - 1]
+    @route.station_list[@route.station_list.index(@current_station) - 1]
   end
 
   def wagon_list
