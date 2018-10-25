@@ -7,7 +7,7 @@ require_relative 'cargo_train'
 require_relative 'wagon'
 require_relative 'passenger_wagon'
 require_relative 'cargo_wagon'
-require_relative 'validation'
+require_relative 'modules/validation'
 
 # main program
 class RailwayStationManagement
@@ -161,6 +161,7 @@ class RailwayStationManagement
       return
     end
     puts 'Выберите индекс конечной станции.'
+    list_of_stations
     end_s = gets.chomp.to_i
     end_station = @stations[end_s]
     if @stations.include?(end_station) && end_station != start_station

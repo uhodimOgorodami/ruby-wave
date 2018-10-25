@@ -1,11 +1,13 @@
-require_relative 'validation'
-require_relative 'made'
-require_relative 'instance_counter'
+require_relative 'modules/instance_counter'
+require_relative 'modules/validation'
+require_relative 'modules/made'
+require_relative 'modules/accessors'
 # === Train ===
 class Train
   include Made
   include InstanceCounter
   include Validation
+  include Accessors
 
   attr_accessor :speed,
                 :route
@@ -14,15 +16,26 @@ class Train
               :type,
               :wagons
 
-  @@trains_counter = {}
 
   TRAIN_FORMAT = /^([a-z]{3}|[0-9]{3})-?([a-z]{2}|[0-9]{2})/i
+
+  validate :number, :format, TRAIN_FORMAT
+  validate :number, :type, String
+  validate :number, :presence
+
+
+  strong_attr_accessor       :route, Route
+  attr_accessor_with_history :station
+
+  @@trains_counter = {}
+
 
   def initialize(number)
     @number                       = number
     @type                         = type
     @wagons                       = []
     @speed                        = 0
+    @route                        = nil
     @@trains_counter[self.number] = self
     validate!
   end
@@ -98,10 +111,4 @@ class Train
     end
   end
 
-  protected
-
-  def validate!
-    raise 'Номер поезда не может быть пустым' if number.to_s.empty?
-    raise 'Номер поезда задан в неверном формате, попробуйте еще раз' if number !~ TRAIN_FORMAT
-  end
 end

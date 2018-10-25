@@ -1,3 +1,6 @@
+require_relative 'modules/validation'
+require_relative 'modules/made'
+
 class Wagon
   include Made
   include Validation

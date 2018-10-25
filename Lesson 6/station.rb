@@ -1,4 +1,4 @@
-require_relative 'validation'
+require_relative 'modules/validation'
 
 class Station
   include Validation
@@ -7,6 +7,10 @@ class Station
   attr_accessor :train_list
 
   STATION_FORMAT = /^[a-z]*|[а-я]*$/i
+
+  validate :name, :format, STATION_FORMAT
+  validate :name, :type, String
+  validate :name, :presence
 
   def self.all
     @@stations_counter
@@ -35,11 +39,11 @@ class Station
 
   protected
 
-  def validate!
-    raise 'название пустое' if name.to_s.empty?
-    raise 'название содержит спецсимволы' if name !~ STATION_FORMAT
-    raise 'название больше 10 символов' if name.size > 10
-
-    true
-  end
+  # def validate!
+  #   raise 'название пустое' if name.to_s.empty?
+  #   raise 'название содержит спецсимволы' if name !~ STATION_FORMAT
+  #   raise 'название больше 10 символов' if name.size > 10
+  #
+  #   true
+  # end
 end
