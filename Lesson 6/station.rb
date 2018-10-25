@@ -8,9 +8,9 @@ class Station
 
   STATION_FORMAT = /^[a-z]*|[а-я]*$/i
 
+  validate :name, :presence
   validate :name, :format, STATION_FORMAT
   validate :name, :type, String
-  validate :name, :presence
 
   def self.all
     @@stations_counter
@@ -36,14 +36,4 @@ class Station
   def trains_list_at_station
     @trains.each { |train| yield train }
   end
-
-  protected
-
-  # def validate!
-  #   raise 'название пустое' if name.to_s.empty?
-  #   raise 'название содержит спецсимволы' if name !~ STATION_FORMAT
-  #   raise 'название больше 10 символов' if name.size > 10
-  #
-  #   true
-  # end
 end

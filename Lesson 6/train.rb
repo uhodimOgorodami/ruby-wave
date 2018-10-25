@@ -1,3 +1,4 @@
+require 'pry'
 require_relative 'modules/instance_counter'
 require_relative 'modules/validation'
 require_relative 'modules/made'
@@ -16,23 +17,19 @@ class Train
               :type,
               :wagons
 
-
   TRAIN_FORMAT = /^([a-z]{3}|[0-9]{3})-?([a-z]{2}|[0-9]{2})/i
 
+  validate :number, :presence
   validate :number, :format, TRAIN_FORMAT
   validate :number, :type, String
-  validate :number, :presence
-
 
   strong_attr_accessor       :route, Route
   attr_accessor_with_history :station
 
   @@trains_counter = {}
 
-
   def initialize(number)
     @number                       = number
-    @type                         = type
     @wagons                       = []
     @speed                        = 0
     @route                        = nil
@@ -110,5 +107,4 @@ class Train
       puts "[#{index}] - вагон «#{wagon.number}»"
     end
   end
-
 end

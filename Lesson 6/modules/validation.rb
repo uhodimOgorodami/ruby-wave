@@ -5,16 +5,12 @@ module Validation
   end
 
   module ClassMethods
-    VALIDATIONS = :@validations
+    attr_reader :validations
 
-    def validate(name, validator, *args)
-      validations = instance_variable_get(VALIDATIONS)
-      validations ||= {}
-      validations[name] ||= {}
-      validations[name][validator] = args
-      instance_variable_set(VALIDATIONS, validations)
+    def validate(name, type, *args)
+      @validations ||= []
+      @validations << { attr: name, type: type, args: args }
     end
-
   end
 
   module InstanceMethods
@@ -27,28 +23,23 @@ module Validation
     protected
 
     def validate!
-      validations = self.class.instance_variable_get(ClassMethods::VALIDATIONS)
-      validations ||= {}
-      validations.each do |name, validator|
-        class_name = "#{self.class} #{name}"
-        validator.each do |validation_type, args|
-          attr_value = instance_variable_get("@#{name}".to_sym)
-          send("#{validation_type}".to_sym, class_name, attr_value, args)
-        end
+      self.class.validations.each do |validation|
+        value = instance_variable_get("@#{validation[:attr]}")
+        send("validate_#{validation[:type]}", validation[:attr], value, *validation[:args])
       end
       true
     end
 
-    def presence(name, value, *args)
-      raise "#{name} не может быть пустым" if value.nil? || value.empty?
+    def validate_presence(_attr, value)
+      raise 'не может быть пустым' if value.nil? || value.to_s.empty?
     end
 
-    def format(name, value, regexp)
-      raise "некорректный формат #{name}" if value !~ regexp[0]
+    def validate_format(attr, value, args)
+      raise "некорректный формат #{attr}" if value !~ args
     end
 
-    def type(name, value, type)
-      raise "атрибут #{name} не принадлежит классу #{type}" unless value.class == type
+    def validate_type(attr, value, type)
+      raise "атрибут #{attr} не принадлежит классу #{type}" unless value.class == type
     end
   end
 end

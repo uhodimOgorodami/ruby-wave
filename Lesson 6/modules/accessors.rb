@@ -22,8 +22,8 @@ module Accessors
     def strong_attr_accessor(var_name, var_class)
       var = "@#{var_name}".to_sym
       define_method(var_name) { instance_variable_get(var) }
-      define_method("#{var_name}=".to_sym) do |value|
-        unless value.instace_of?(var_class)
+      define_method("@#{var_name}=".to_sym) do |value|
+        unless value.instance_of?(var_class)
           raise TypeError, "#{var_name} не является экземпляром класса #{var_class}!"
         end
 
