@@ -1,7 +1,8 @@
-require_relative 'modules/validation'
-
 class PassengerTrain < Train
-  include Validation
+  validate :number, :presence
+  validate :number, :format, TRAIN_FORMAT
+  validate :number, :type, String
+
   def initialize(number)
     super
     @type = :passenger

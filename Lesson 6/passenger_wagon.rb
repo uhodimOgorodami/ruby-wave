@@ -1,8 +1,9 @@
+require_relative 'modules/validation'
+
 class PassengerWagon < Wagon
-  attr_reader :number,
-              :type,
-              :made,
-              :passenger_seats
+  attr_reader :number, :type, :made, :passenger_seats
+
+  validate :num, :presence
 
   def initialize(number, seats)
     super

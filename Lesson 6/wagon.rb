@@ -7,17 +7,12 @@ class Wagon
   attr_accessor :type, :number, :made
   WAGON_FORMAT = /^[1-9]{2}$/
 
-  def initialize(number, *)
-    @number = number
+  validate :num, :presence
+  validate :num, :format, WAGON_FORMAT
+  validate :num, :type, String
+
+  def initialize(num, *)
+    @num = num
     validate!
-  end
-
-  protected
-
-  def validate!
-    error_message = 'Некорректный номер вагона'
-    raise error_message if @number.to_s !~ WAGON_FORMAT
-
-    true
   end
 end

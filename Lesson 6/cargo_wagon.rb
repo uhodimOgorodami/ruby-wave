@@ -1,6 +1,8 @@
 class CargoWagon < Wagon
   attr_reader :number, :type, :made, :all_volume
 
+  validate :num, :presence
+
   def initialize(number, all_volume)
     super
     @type = :cargo

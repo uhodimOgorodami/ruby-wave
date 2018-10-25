@@ -2,7 +2,7 @@ require_relative 'modules/validation'
 # === Route ===
 class Route
   include Validation
-  attr_reader :midway_station_list
+  attr_reader :stations
 
   validate :stations, :presence
 
